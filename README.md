@@ -6,6 +6,8 @@ Version 0.01
 
 # SYNOPSIS
 
+    use Algorithm::Backoff;
+
     my $backoff = Algorithm::Backoff->new(
         min   => 0.1,
         max   => 5,
@@ -34,6 +36,26 @@ In case of `some_service` failures, this snipplet will sleep
 `some_service` again. If it continue to fail it the sleep delay
 before next attempts will be `5`, and it will emit additional
 warnings.
+
+# DESCRIPTION
+
+The backoff algorihm generates sequence of numbers, each one
+is just doubled previous value until it hits maximum. The first
+value is by convension zero.
+
+This numbers are useful, for example, when some service is
+choking under load (or restarting), and instead of endlessly
+poll it like
+
+    while(1) {
+        try {
+            $service->connect;
+            $service->get_something;
+        };
+    }
+
+The algorim allows to poll it in more polite manner, i.e.
+with increasing delay with each next attempt.
 
 # STATIC METHODS
 
