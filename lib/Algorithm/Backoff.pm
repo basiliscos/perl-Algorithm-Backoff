@@ -25,6 +25,7 @@ our $VERSION = 0.01;
 =head1 SYNOPSIS
 
     use Algorithm::Backoff;
+    use Time::HiRes;
 
     my $backoff = Algorithm::Backoff->new(
         min   => 0.1,
@@ -34,8 +35,9 @@ our $VERSION = 0.01;
     my $some_service = Some::Service->new;
 
     while (1) {
+        # returns 0 on 1st invocation or after reset
         my $delay = $backoff->next_value;
-        sleep($delay);
+        Time::HiRes::sleep($delay);
         my $result = eval { $some_service->run; 1 };
         if ($result) {
             # seems all fine with service
